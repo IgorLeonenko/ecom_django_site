@@ -1,4 +1,5 @@
 from django.shortcuts import render
+from django.core.paginator import Paginator
 from .models import Product
 
 def index(request):
@@ -8,6 +9,16 @@ def index(request):
     search = request.GET.get('search')
     if search != '' and search is not None:
         products = Product.objects.filter(title__icontains=search)
-        context = { "product_objects": products }
+
+
+    paginator = Paginator(products, 2)
+    page = request.GET.get('page')
+    products = paginator.get_page(page)
+
+    context = { "product_objects": products }
     return render(request, 'shop/index.html', context)
+
+def detail(request, id):
+    product = Product.objects.get(id=id)
+    return render(request, 'shop/detail.html', { "product": product })
 

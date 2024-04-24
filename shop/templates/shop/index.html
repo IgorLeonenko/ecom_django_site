@@ -38,11 +38,51 @@
                 <p>Price: $ {{ product_object.price }}</p>
                 <span>-------------</span>
                 <p>Description:{{ product_object.description }}</p>
+                <a href="{% url 'detail' product_object.id %}" class="btn btn-warning">Detail</a>
+                <a href="#" class="btn btn-warning">Add to cart</a>
               </div>
             </div>
           </div>
         </div>
       {% endfor %}
+    </div>
+
+    <div class="row">
+      <div class="col-md-12 mt-4">
+        <nav aria-label="Page navigation example">
+          <ul class="pagination">
+            {% if product_objects.has_previous %}
+              <li class="page-item">
+                <a class="page-link" href="?page=1">First</a>
+              </li>
+              <li class="page-item">
+                <a class="page-link" href="?page={{ product_objects.previous_page_number }}">Previous</a>
+              </li>
+            {% endif %}
+
+            {% for num in product_objects.paginator.page_range %}
+              {% if product_objects.number == num %}
+                <li class="page-item active">
+                  <a class="page-link" href="?page={{ num }}">{{ num }}</a>
+                </li>
+              {% else %}
+                <li class="page-item">
+                  <a class="page-link" href="?page={{ num }}">{{ num }}</a>
+                </li>
+              {% endif %}
+            {% endfor %}
+
+            {% if product_objects.has_next %}
+              <li class="page-item">
+                <a class="page-link" href="?page={{ product_objects.next_page_number }}">Next</a>
+              </li>
+              <li class="page-item">
+                <a class="page-link" href="?page={{ product_objects.paginator.num_pages }}">Last</a>
+              </li>
+            {% endif %}
+          </ul>
+        </nav>
+      </div>
     </div>
   </div>
 </body>
